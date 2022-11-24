@@ -10,16 +10,18 @@ import UIKit
 
 struct ContentView: View {
     
-    @State private var choiceMade:String = "Search"
-    @State private var buttonSearchColor = Color.red
+    var buttonSearchColor = SearchUnivView().buttonSearchColor
+    var selectText = SearchUnivView().selectText
     
-    var color1 = Color(UIColor(displayP3Red: 234, green: 98, blue: 139, alpha: 1))
-    var color2 = Color(UIColor(displayP3Red: 244, green: 177, blue: 245, alpha: 1))
+    @State private var choiceMade:String = "Search"
+    @State var showingBottomSheet = false
+
     let skyBlue = Color(red: 0.4627, green: 0.8392, blue: 1.0)
+    
     
     var body: some View {
         ZStack {
-            LinearGradient(gradient: Gradient(colors: [color2,
+            LinearGradient(gradient: Gradient(colors: [.white,
                                                        skyBlue]),
                            startPoint: .top, endPoint: .bottom).edgesIgnoringSafeArea(.all)
             
@@ -29,34 +31,23 @@ struct ContentView: View {
                 
                 Text("Please, select your univercity")
                     .padding(.bottom, 30)
+                    .font(.system(size: 20))
                 
-                Menu {
-                    Button {
-                        choiceMade = "First univercity"
-                        buttonSearchColor = Color.green
-                    } label: {
-                        Text("First univercity")
+                VStack {
+                    Button(selectText) {
+                        showingBottomSheet.toggle()
                     }
-                    Button {
-                        choiceMade = "Second univercity"
-                    } label: {
-                        Text("Second univercity")
-                    }
-
-                } label: {
-                    Label {
-                        Text(choiceMade)
-                    } icon: {
-                        Image(systemName: "magnifyingglass")
-                    }
-                    .padding(.vertical, 10)
                     .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .foregroundColor(Color.black)
 
                 }
-                .foregroundColor(Color.black)
+                .sheet(isPresented: $showingBottomSheet) {
+                    SearchUnivView()
+                }
                 .background(buttonSearchColor)
-                .cornerRadius(15)
-                .padding(.bottom, 20)
+                .cornerRadius(10)
+
                 
                 Spacer()
 
@@ -92,3 +83,5 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
